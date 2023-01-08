@@ -1,20 +1,18 @@
 package com.example.abcd.adapter
 
-import android.content.Context
-import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.bumptech.glide.Glide
 import com.example.abcd.R
 import com.example.abcd.modelclasses.Article
 import kotlinx.android.synthetic.main.item_view.view.*
 
-class AppAdapter ( val articles : List<Article>) : RecyclerView.Adapter<AppAdapter.NewsHolder>() {
+class AppAdapter (val articles : List<Article>) : RecyclerView.Adapter<AppAdapter.NewsHolder>() {
+    var onTap: ((Article) -> Unit)? = null
+
     inner class NewsHolder(ViewItem: View) : RecyclerView.ViewHolder(ViewItem)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsHolder {
@@ -28,14 +26,14 @@ class AppAdapter ( val articles : List<Article>) : RecyclerView.Adapter<AppAdapt
             textViewNewsTitle.text = articles[position].title
             textViewNewsDescription.text = articles[position].description
         }
-        holder.itemView.setOnClickListener {
-            Toast.makeText(it.context,articles[position].title,Toast.LENGTH_LONG).show()
-            
-
+        holder.itemView.setOnClickListener{
+            Log.d("TRACK_ITEM_CLICK", it.toString())
+            onTap?.invoke(articles[position])
         }
     }
 
     override fun getItemCount(): Int {
         return articles.size
     }
+
 }
